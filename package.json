@@ -1,0 +1,10 @@
+{
+  "name": "apifox-to-ts",
+  "version": "1.0.0",
+  "description": "apifox转换成 d.ts注释",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
+}
