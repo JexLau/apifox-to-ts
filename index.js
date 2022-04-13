@@ -1,13 +1,13 @@
 const axios = require("axios");
 const { existsSync, mkdirSync, rmdirSync, writeFileSync } = require("fs");
 
-const key = "dist";
+const output = "dist";
 const share_id = ""
 
 // 清一下目录
-existsSync(`${key}`) && rmdirSync(`./${key}`, { recursive: true });
+existsSync(`${output}`) && rmdirSync(`./${output}`, { recursive: true });
 
-const distPath = `./${key}`;
+const distPath = `./${output}`;
 mkdirSync(`${distPath}`, { recursive: true });
 
 // 先抽离schemas
@@ -57,7 +57,7 @@ axios.get(schemasUrl).then(res => {
     }`
   })
 
-  const componentPath = `./rms/schema.d.ts`;
+  const componentPath = `${distPath}/schema.d.ts`;
 
   writeFileSync(
     componentPath,
@@ -90,7 +90,7 @@ axios.get(requestUrl).then(apiTreeData => {
     const { pathsFile, servicesFile } = data;
     /** 接口paths */
     writeFileSync(
-      `./rms/paths.d.ts`,
+      `${distPath}/paths.d.ts`,
       `
 declare namespace Api {
   namespace Paths {
@@ -101,7 +101,7 @@ declare namespace Api {
 
     /** 服务接口service */
     writeFileSync(
-      `./rms/services.ts`,
+      `${distPath}/services.ts`,
       `
 \/** Tip: 需要手动引入 request 函数 *\/
 import request from "@/utils/request";
