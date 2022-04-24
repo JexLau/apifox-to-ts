@@ -81,11 +81,18 @@ axios.get(requestUrl).then(apiTreeData => {
   // 遍历模块，取出模块id用于获取api接口
   let urls = apiTree.map(item => {
     return item.children.map(child => {
-      return child.api.id;
+      if (child.api) {
+        return child.api.id
+      } else {
+        if (child.children.length) {
+          return child.children.map(item2 => item2.api.id)
+        }
+      }
     })
   });
   // 拍平一下
   urls = urls.flat(Infinity);
+  console.log(`**************成功获取 urls 数据**************`, urls.join(" | "));
   executeUrls(urls).then((data) => {
     const { pathsFile, servicesFile } = data;
     /** 接口paths */
@@ -369,13 +376,11 @@ function convertServices(item) {
 ** 接口描述: ${item.description}
 *\/
 export function ${apiName} (params: Api.Paths.${apiName}.Request) {
-  return request<Api.Paths.${apiName}.Response>(
-    \`${item.path.replace(/[{]/g, "${params.")}\`,
-    {
-      method: "${item.method.toUpperCase()}",
-      ${["GET", "DELETE"].includes(item.method.toUpperCase()) ? "params," : "data: params,"}
-    }
-  );
+  return request<Promise<Api.Paths.${apiName}.Response>>({
+    url: \`${item.path.replace(/[{]/g, "${params.")}\`,
+    method: "${item.method.toUpperCase()}",
+    ${["GET", "DELETE"].includes(item.method.toUpperCase()) ? "params," : "data: params,"}
+  });
 }
         `;
   return servicesFileCotent;
