@@ -2,7 +2,8 @@ const axios = require("axios");
 const { existsSync, mkdirSync, rmdirSync, writeFileSync } = require("fs");
 
 const output = "dist";
-const share_id = ""
+// https://www.apifox.cn/apidoc/shared-2a4ce230-99a8-411a-9b31-908d607a3e6e
+const share_id = "2a4ce230-99a8-411a-9b31-908d607a3e6e"
 
 // 清一下目录
 existsSync(`${output}`) && rmdirSync(`./${output}`, { recursive: true });
@@ -361,7 +362,7 @@ function convertResponse(responses) {
 }
 
 function formatSchemaName(str) {
-  return str.replace(/«|»/g, "")
+  return str.replace(/«|»|\./g, "")
 }
 
 function convertServices(item) {
